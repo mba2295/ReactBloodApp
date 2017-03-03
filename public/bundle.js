@@ -65265,17 +65265,31 @@
 	var Navbar = React.createClass({
 	    displayName: 'Navbar',
 
+	    getInitialState: function getInitialState() {
+	        return { initialTab: 0 };
+	    },
 	    getChildContext: function getChildContext() {
 	        return { muiTheme: (0, _getMuiTheme2.default)(_lightBaseTheme2.default) };
+	    },
+	    componentDidMount: function componentDidMount() {
+	        this.checkLocation();
 	    },
 	    checkTouch: function checkTouch(value) {
 	        if (value == 0) {
 	            hashHistory.push('/home');
+	            this.setState({ initialTab: 0 });
 	        } else {
 	            hashHistory.push('/requests');
+	            this.setState({ initialTab: 1 });
 	        }
 	    },
-
+	    checkLocation: function checkLocation() {
+	        if (window.location.href.indexOf('home') > -1) {
+	            this.setState({ initialTab: 0 });
+	        } else {
+	            this.setState({ initialTab: 1 });
+	        }
+	    },
 	    render: function render() {
 	        var styles = {
 	            appBar: {
@@ -65294,7 +65308,7 @@
 	            { showMenuIconButton: false, style: styles.appBar, title: 'Blood Application' },
 	            React.createElement(
 	                _materialUi.Tabs,
-	                { style: styles.tabs, onChange: this.checkTouch },
+	                { value: this.state.initialTab, style: styles.tabs, onChange: this.checkTouch },
 	                React.createElement(_materialUi.Tab, { value: 0, label: 'Requests' }),
 	                React.createElement(_materialUi.Tab, { value: 1, label: 'Donors' })
 	            ),
